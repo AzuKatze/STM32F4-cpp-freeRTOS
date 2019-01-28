@@ -122,11 +122,13 @@ void MX_FREERTOS_Init(void) {
 void CANTask(void const * argument){
     for(;;){
         osCanTask ();
+        osDelay (10);
     }
 }
 void IMUTask(void const * argument){
     for(;;){
         osIMUTask ();
+        osDelay (15);
     }
 }
 void ChassisTask(void const * argument){
@@ -142,6 +144,7 @@ void YuntaiTask(void const * argument){
 void RemoteTask(void const *argument){
     for(;;){
         osRemoteTask ();
+        osDelay (10);
     }
 }
 /* USER CODE END Application */
