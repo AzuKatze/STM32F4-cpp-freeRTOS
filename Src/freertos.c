@@ -42,6 +42,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+#include <memory.h>
 #include "FreeRTOS.h"
 #include "task.h"
 #include "cmsis_os.h"
@@ -51,18 +52,17 @@
 #include "can.h"
 #include "usart.h"
 #include "test_can.h"
+#include "task.h"
 #include "../cpp-src/Boot.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
-osThreadId defaultTaskHandle;
-osThreadId CANTaskHandle;
-osThreadId RemoteTaskHandle;
-osThreadId IMUTaskHandle;
-osThreadId ChassisTaskHandle;
-osThreadId YuntaiTaskHandle;
+static osThreadId CANTaskHandle;
+static osThreadId RemoteTaskHandle;
+static osThreadId IMUTaskHandle;
+static osThreadId ChassisTaskHandle;
+static osThreadId YuntaiTaskHandle;
 /* USER CODE BEGIN Variables */
-
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
@@ -99,16 +99,16 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
 
-  osThreadDef(CANDEF,CANTask,osPriorityRealtime,0,1024);
+  osThreadDef(CANDEF,CANTask,osPriorityRealtime,0,512);
   CANTaskHandle = osThreadCreate (osThread(CANDEF),NULL);
 
-  osThreadDef(IMUDEF,IMUTask,osPriorityAboveNormal,0,1024);
+  osThreadDef(IMUDEF,IMUTask,osPriorityNormal,0,512);
   IMUTaskHandle = osThreadCreate (osThread(IMUDEF),NULL);
 
-  osThreadDef(REMOTEDEF,RemoteTask,osPriorityHigh,0,1024);
+  osThreadDef(REMOTEDEF,RemoteTask,osPriorityHigh,0,512);
   RemoteTaskHandle = osThreadCreate (osThread(REMOTEDEF),NULL);
 
-  osThreadDef(CHASSISDEF,ChassisTask,osPriorityNormal,0,1024);
+  osThreadDef(CHASSISDEF,ChassisTask,osPriorityHigh,0,512);
   ChassisTaskHandle = osThreadCreate (osThread(CHASSISDEF),NULL);
 
   osThreadDef(YUNTAIDEF, YuntaiTask, osPriorityNormal, 0, 1024);
@@ -128,23 +128,26 @@ void CANTask(void const * argument){
     osSignalWait (0x03,100);
     for(;;){
         osCanTask ();
-        osDelay (10);
+        osDelay (20);
     }
 }
 void IMUTask(void const * argument){
     for(;;){
         osIMUTask ();
-        osDelay (15);
+        osDelay (10);
+
     }
 }
 void ChassisTask(void const * argument){
     for(;;){
         osChassisTask ();
+        osDelay (10);
     }
 }
 void YuntaiTask(void const * argument){
     for(;;){
         osYuntaiTask ();
+        osDelay (10);
     }
 }
 void RemoteTask(void const *argument){
@@ -158,7 +161,7 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan){
     osSignalSet (CANTaskHandle,0x03);
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-    osSignalSet (RemoteTaskHandle,0x01);
+    osSignalSet (RemoteTaskHandle,0x05);
 }
 
 /* USER CODE END Application */

@@ -83,6 +83,7 @@ bool CANSystem::update() {
     }
 
     HAL_CAN_Receive_IT (hcan,CAN_FIFO0);
+
 }
 
 bool CANSystem::set(int id, uint16_t data) {

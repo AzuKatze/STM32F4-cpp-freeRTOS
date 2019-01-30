@@ -22,13 +22,13 @@ bool RemoteSystem::initialize() {
 int16_t RemoteSystem::getAxis(int id) {
     switch(id) {
         case CTR_CH1:
-            return rc.ch1;
+            return (rc.ch1-1024);
         case CTR_CH2:
-            return rc.ch2;
+            return (rc.ch2-1024);
         case CTR_CH3:
-            return rc.ch3;
+            return (rc.ch3-1024);
         case CTR_CH4:
-            return rc.ch4;
+            return (rc.ch4-1024);
         default:
             return 0;
     }

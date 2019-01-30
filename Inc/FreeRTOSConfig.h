@@ -91,6 +91,7 @@
     #include <stdint.h>
     #include "main.h" 
     extern uint32_t SystemCoreClock;
+    extern volatile uint32_t ulHighFrequencyTimerTicks;
 #endif
 
 #define configUSE_PREEMPTION                     1
@@ -109,6 +110,9 @@
 #define configUSE_TASK_NOTIFICATIONS             1
 #define configUSE_COUNTING_SEMAPHORES            1
 #define configIDLE_SHOULD_YIELD                  1
+#define configUSE_TRACE_FACILITY                 1
+#define configGENERATE_RUN_TIME_STATS            1
+#define configUSE_STATS_FORMATTING_FUNCTIONS     1
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES                    0
 #define configMAX_CO_ROUTINE_PRIORITIES          ( 2 )
@@ -123,7 +127,8 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil             0
 #define INCLUDE_vTaskDelay                  1
 #define INCLUDE_xTaskGetSchedulerState      1
-
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()     (ulHighFrequencyTimerTicks = 0ul)
+#define portGET_RUN_TIME_COUNTER_VALUE()    ulHighFrequencyTimerTicks
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
  /* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */

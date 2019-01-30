@@ -49,6 +49,7 @@ void OI::SystemStart() {
     this->yuntaiCanSystem->initialize ();
     this->imuSystem->initialize ();
     this->remoteSystem->initialize ();
+    this->initialized = true;
     HAL_Delay (10);
 }
 void OI::CanTask() {

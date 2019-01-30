@@ -54,6 +54,6 @@ extern OI *oi;
 
 
 
-#define OK(x) if (!(x)) Error_Handler()
+#define OK(x) if (!(x)) while(1)
 
 #endif //RMV3TESTDEMO_OI_H

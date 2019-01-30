@@ -86,9 +86,6 @@ int main(void){
   Init_Periphals ();
 
   CanFilter_Init (&hcan1);
-  CanFilter_Init (&hcan2);
-  //HAL_CAN_Receive_IT (&hcan1,CAN_FIFO0);
-  //HAL_CAN_Receive_IT (&hcan2, CAN_FIFO0);
 
   MX_FREERTOS_Init ();
 
