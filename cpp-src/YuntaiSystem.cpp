@@ -51,7 +51,6 @@ bool YuntaiSystem::update() {
     oi->yuntaiCanSystem->set (PITCH_ID,PitchVelOutPut);
 
     oi->yuntaiCanSystem->set (YAW_ID,YawVelOutPut);
-
 }
 
 bool YuntaiSystem::destroy() {

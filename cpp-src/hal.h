@@ -19,5 +19,6 @@ extern "C" {
 #include "test_can.h"
 #include "tim.h"
 #include "bsp_uart.h"
+#include "stm32f4xx_it.h"
 }
 #endif //RMV3TESTDEMO_HAL_H

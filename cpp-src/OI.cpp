@@ -44,7 +44,11 @@ void OI::SystemStart() {
     this->chassisSystem = new ChassisSystem;
     this->remoteSystem = new RemoteSystem;
     this->yuntaiSystem = new YuntaiSystem;
-
+    this->chassisCanSystem->initialize ();
+    this->chassisSystem->initialize ();
+    this->yuntaiCanSystem->initialize ();
+    this->imuSystem->initialize ();
+    this->remoteSystem->initialize ();
     HAL_Delay (10);
 }
 void OI::CanTask() {
@@ -58,7 +62,7 @@ void OI::YuntaiTask() {
     this->yuntaiSystem->update ();
 }
 void OI::ChassisTask() {
-    this->chassisCanSystem->update ();
+    this->chassisSystem->update ();
 }
 void OI::IMUTask() {
     this->imuSystem->update ();

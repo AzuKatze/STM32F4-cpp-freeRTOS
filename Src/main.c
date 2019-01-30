@@ -51,7 +51,7 @@
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
-
+#include "test_can.h"
 /* USER CODE BEGIN Includes */
 
 
@@ -71,68 +71,31 @@ void MX_FREERTOS_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-
+void Init_Periphals();
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
 
-int main(void)
-{
-
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration----------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+int main(void){
   HAL_Init();
 
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_CAN1_Init();
-  MX_CAN2_Init();
-  MX_SPI5_Init();
-  MX_TIM2_Init();
-  MX_TIM4_Init();
-  MX_TIM5_Init();
-  MX_TIM6_Init();
-  MX_TIM8_Init();
-  MX_TIM12_Init();
-  MX_USART1_UART_Init();
-  MX_USART2_UART_Init();
-  MX_USART3_UART_Init();
-  MX_USART6_UART_Init();
-  MX_TIM3_Init();
-  MX_UART8_Init();
+  Init_Periphals ();
 
-  /* USER CODE BEGIN 2 */
+  CanFilter_Init (&hcan1);
+  CanFilter_Init (&hcan2);
+  //HAL_CAN_Receive_IT (&hcan1,CAN_FIFO0);
+  //HAL_CAN_Receive_IT (&hcan2, CAN_FIFO0);
 
-  /* USER CODE END 2 */
+  MX_FREERTOS_Init ();
 
-  /* Call init function for freertos objects (in freertos.c) */
-  MX_FREERTOS_Init();
-
-  /* Start scheduler */
   osKernelStart();
-  
-  /* We should never get here as control is now taken by the scheduler */
+  for(;;){
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-  /* USER CODE END WHILE */
-
-  /* USER CODE BEGIN 3 */
   }
-  /* USER CODE END 3 */
 }
 
 /** System Clock Configuration
@@ -191,7 +154,25 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void Init_Periphals(){
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_CAN1_Init();
+  MX_CAN2_Init();
+  MX_SPI5_Init();
+  MX_TIM2_Init();
+  MX_TIM4_Init();
+  MX_TIM5_Init();
+  MX_TIM6_Init();
+  MX_TIM8_Init();
+  MX_TIM12_Init();
+  MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
+  MX_USART3_UART_Init();
+  MX_USART6_UART_Init();
+  MX_TIM3_Init();
+  MX_UART8_Init();
+}
 /* USER CODE END 4 */
 
 /**

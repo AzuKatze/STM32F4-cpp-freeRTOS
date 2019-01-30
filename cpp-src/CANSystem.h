@@ -20,18 +20,21 @@ private:
     uint8_t can_recv_data_[CAN_MAX_CAN_ID +1][CAN_MAX_DATA_ID];
     bool can_recv_data_available_[CAN_MAX_CAN_ID + 1][CAN_MAX_DATA_ID];
 
-    CAN_FilterConfTypeDef canfilter;
-    CanRxMsgTypeDef Rx1Message;
-    CanRxMsgTypeDef Rx2Message;
-    CanTxMsgTypeDef Tx1Message;
-    CanTxMsgTypeDef Tx2Message;
     uint8_t can1_rx_data_[8];
     uint8_t can2_rx_data_[8];
     uint8_t can1_tx_data_[8];
     uint8_t can2_tx_data_[8];
 
+    CanRxMsgTypeDef Rx1Message;
+    CanRxMsgTypeDef Rx2Message;
+    CanTxMsgTypeDef Tx1Message;
+    CanTxMsgTypeDef Tx2Message;
+
+    CAN_FilterConfTypeDef canfilter;
+
     int can_id;
 public:
+
     CANSystem (int can_id);
 
     bool initialize ();

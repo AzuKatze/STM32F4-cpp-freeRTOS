@@ -45,8 +45,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "cmsis_os.h"
-
+#include "stm32f4xx_it.h"
+#include "stm32f4xx_hal.h"
 /* USER CODE BEGIN Includes */
+#include "can.h"
+#include "usart.h"
+#include "test_can.h"
 #include "../cpp-src/Boot.h"
 /* USER CODE END Includes */
 
@@ -71,7 +75,6 @@ void RemoteTask(void const * argument);
 void ChassisTask(void const * argument);
 void YuntaiTask(void const * argument);
 /* USER CODE END FunctionPrototypes */
-
 /* Hook prototypes */
 
 /* Init FreeRTOS */
@@ -87,6 +90,7 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
+
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -94,6 +98,7 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_TIMERS */
 
   /* Create the thread(s) */
+
   osThreadDef(CANDEF,CANTask,osPriorityRealtime,0,1024);
   CANTaskHandle = osThreadCreate (osThread(CANDEF),NULL);
 
@@ -120,6 +125,7 @@ void MX_FREERTOS_Init(void) {
 
 /* USER CODE BEGIN Application */
 void CANTask(void const * argument){
+    osSignalWait (0x03,100);
     for(;;){
         osCanTask ();
         osDelay (10);
@@ -142,11 +148,18 @@ void YuntaiTask(void const * argument){
     }
 }
 void RemoteTask(void const *argument){
+    osSignalWait (0x05,100);
     for(;;){
         osRemoteTask ();
         osDelay (10);
     }
 }
-/* USER CODE END Application */
+void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan){
+    osSignalSet (CANTaskHandle,0x03);
+}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+    osSignalSet (RemoteTaskHandle,0x01);
+}
 
+/* USER CODE END Application */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -8,10 +8,11 @@
 #include <cstring>
 #include "CANSystem.h"
 #include "OI.h"
-
+#include "hal.h"
 #define CAN_ID 0x200
 
 CANSystem::CANSystem(int can_id){
+    this->can_id = can_id;
 }
 
 bool CANSystem::initialize() {
@@ -21,7 +22,6 @@ bool CANSystem::initialize() {
     canfilter.FilterMode = CAN_FILTERMODE_IDMASK;
     canfilter.FilterScale = CAN_FILTERSCALE_32BIT;
 
-    //filtrate any ID you want here
     canfilter.FilterIdHigh = 0x0000;
     canfilter.FilterIdLow = 0x0000;
     canfilter.FilterMaskIdHigh = 0x0000;
@@ -31,24 +31,20 @@ bool CANSystem::initialize() {
     canfilter.FilterActivation = ENABLE;
     canfilter.BankNumber = 14;
 
-
-
-    //use different filter for can1&can2
-    if(hcan == &hcan1){
+    if(can_id == 0){
         canfilter.FilterNumber = 0;
-        hcan->pTxMsg = &Tx1Message;
-        hcan->pRxMsg = &Rx1Message;
+        hcan1.pTxMsg = &Tx1Message;
+        hcan1.pRxMsg = &Rx1Message;
     }
-    if(hcan == &hcan2){
+    if(can_id == 1){
         canfilter.FilterNumber = 14;
-        hcan->pTxMsg = &Tx2Message;
-        hcan->pRxMsg = &Rx2Message;
+        hcan2.pTxMsg = &Tx2Message;
+        hcan2.pRxMsg = &Rx2Message;
     }
 
     HAL_CAN_ConfigFilter(hcan, &canfilter);
 
-    if(HAL_CAN_Init (hcan)!=HAL_OK)
-        Error_Handler ();
+
 
     memset(this->can_write_data_, 0, sizeof(this->can_write_data_));
     memset(this->can_recv_data_, 0, sizeof(this->can_recv_data_));
@@ -59,8 +55,9 @@ bool CANSystem::initialize() {
     memset (this->can2_tx_data_,0,sizeof(this->can2_tx_data_));
 
     hcan->pTxMsg->StdId = CAN_ID;
-    hcan->pTxMsg->IDE = CAN_ID_STD;
+    hcan->pTxMsg->ExtId = 0x00;
     hcan->pTxMsg->RTR = CAN_RTR_DATA;
+    hcan->pTxMsg->IDE = CAN_ID_STD;
     hcan->pTxMsg->DLC = 0x08;
 
     return true;
@@ -71,7 +68,7 @@ bool CANSystem::destroy() {
 }
 
 bool CANSystem::update() {
-    CAN_HandleTypeDef *hcan=&(can_id==0?hcan1:hcan2);
+     CAN_HandleTypeDef *hcan=&(can_id==0?hcan1:hcan2);
 
 
     for (int i = 0; i < 4; i++) {
@@ -85,7 +82,7 @@ bool CANSystem::update() {
         can_recv_data_[hcan->pRxMsg->StdId-0x201][j] = hcan->pRxMsg->Data[j];
     }
 
-
+    HAL_CAN_Receive_IT (hcan,CAN_FIFO0);
 }
 
 bool CANSystem::set(int id, uint16_t data) {
