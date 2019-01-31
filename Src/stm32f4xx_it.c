@@ -36,6 +36,7 @@
 #include "stm32f4xx_it.h"
 #include "cmsis_os.h"
 #include "FreeRTOSConfig.h"
+#include "bsp_uart.h"
 /* USER CODE BEGIN 0 */
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL;
@@ -207,7 +208,7 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 0 */
 
   /* USER CODE END USART1_IRQn 0 */
-  HAL_UART_IRQHandler(&huart1);
+  RemoteCtl_Data_Receive ();
   /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */

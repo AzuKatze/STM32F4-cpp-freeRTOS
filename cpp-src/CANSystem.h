@@ -12,11 +12,10 @@
 
 #define CAN_MAX_CAN_ID 8
 #define CAN_MAX_DATA_ID 8
-#define CAN_MAX_ANGLE 8192
 
 class CANSystem {
 private:
-    uint16_t can_write_data_[CAN_MAX_CAN_ID + 1];
+    int16_t can_write_data_[CAN_MAX_CAN_ID + 1];
     uint8_t can_recv_data_[CAN_MAX_CAN_ID +1][CAN_MAX_DATA_ID];
     bool can_recv_data_available_[CAN_MAX_CAN_ID + 1][CAN_MAX_DATA_ID];
 
@@ -24,6 +23,8 @@ private:
     uint8_t can2_rx_data_[8];
     uint8_t can1_tx_data_[8];
     uint8_t can2_tx_data_[8];
+
+    double sum = 0;
 
     CanRxMsgTypeDef Rx1Message;
     CanRxMsgTypeDef Rx2Message;
@@ -43,9 +44,9 @@ public:
 
     bool update ();
 
-    bool set (int id, uint16_t data);
+    bool set (int id, int16_t data);
 
-    uint16_t get(int id,int data_id);
+    double get(int id);
 };
 
 

@@ -70,7 +70,6 @@ bool CANSystem::destroy() {
 bool CANSystem::update() {
      CAN_HandleTypeDef *hcan=&(can_id==0?hcan1:hcan2);
 
-
     for (int i = 0; i < 4; i++) {
         hcan->pTxMsg->Data[ i * 2 ] = (uint8_t) ( can_write_data_[ i ] >> 8 );
         hcan->pTxMsg->Data[ i * 2 + 1 ] = (uint8_t) ( can_write_data_[ i ] );
@@ -83,16 +82,19 @@ bool CANSystem::update() {
     }
 
     HAL_CAN_Receive_IT (hcan,CAN_FIFO0);
-
 }
 
-bool CANSystem::set(int id, uint16_t data) {
+bool CANSystem::set(int id, int16_t data) {
     this->can_write_data_[id] = data;
+
     return true;
 }
 
-uint16_t CANSystem::get(int id , int data_id) {
-    return this->can_recv_data_[id][data_id];
+double CANSystem::get(int id ) {
+
+    sum = (((int16_t)can_recv_data_[id][2]<<8) | ((int16_t)can_recv_data_[id][3]));
+
+    return sum;
 }
 
 

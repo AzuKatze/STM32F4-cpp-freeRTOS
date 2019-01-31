@@ -21,9 +21,9 @@
 class ChassisSystem {
 private:
     int16_t BF,LR,ROT;
-    IncrPIDSystem<int16_t> IncrPID;
-    const double Kp = 3.0, Ki = 0, Kd = 1.5;
-    const double output_max = 10000;
+    IncrPIDSystem<double> IncrPID;
+    const double Kp = 10, Ki = 0, Kd = 0;
+    const double output_max = 2000;
 public:
 
 

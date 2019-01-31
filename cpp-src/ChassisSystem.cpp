@@ -31,19 +31,15 @@ bool ChassisSystem::update() {
 
     outPutRef[CHASSIS_BR_ID] = BF - LR + ROT;
 
-    int16_t outPutReal[4];
+    double outPutReal[4];
 
-    outPutReal[CHASSIS_FR_ID] = (int16_t )oi->chassisCanSystem->get (CHASSIS_FR_ID,2) << 8 \
-                                | (int16_t)oi->chassisCanSystem->get (CHASSIS_FR_ID,3);
+    outPutReal[CHASSIS_FR_ID] = oi->chassisCanSystem->get (CHASSIS_FR_ID);
 
-    outPutReal[CHASSIS_FR_ID] = (int16_t )oi->chassisCanSystem->get (CHASSIS_FL_ID,2) << 8 \
-                                | (int16_t)oi->chassisCanSystem->get (CHASSIS_FL_ID,3);
+    outPutReal[CHASSIS_FR_ID] = -oi->chassisCanSystem->get (CHASSIS_FL_ID);
 
-    outPutReal[CHASSIS_FR_ID] = (int16_t )oi->chassisCanSystem->get (CHASSIS_BR_ID,2) << 8 \
-                                | (int16_t)oi->chassisCanSystem->get (CHASSIS_BR_ID,3);
+    outPutReal[CHASSIS_FR_ID] = -oi->chassisCanSystem->get (CHASSIS_BR_ID);
 
-    outPutReal[CHASSIS_FR_ID] = (int16_t )oi->chassisCanSystem->get (CHASSIS_BL_ID,2) << 8 \
-                                | (int16_t)oi->chassisCanSystem->get (CHASSIS_BL_ID,3);
+    outPutReal[CHASSIS_FR_ID] = -oi->chassisCanSystem->get (CHASSIS_BL_ID);
 
     int16_t outPut[4];
 

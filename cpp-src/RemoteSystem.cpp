@@ -7,28 +7,28 @@
 
 #include "RemoteSystem.h"
 #include "OI.h"
+#include "hal.h"
 
-extern rc_info_t rc;
 
 RemoteSystem::RemoteSystem() {
 
 }
 
 bool RemoteSystem::initialize() {
-    dbus_uart_init();
+    RemoteCtl_Data_Receive_Start ();
     return true;
 }
 
 int16_t RemoteSystem::getAxis(int id) {
     switch(id) {
         case CTR_CH1:
-            return (rc.ch1-1024);
+            return (RemoteCtrlData.remote.ch0-1024);
         case CTR_CH2:
-            return (rc.ch2-1024);
+            return (RemoteCtrlData.remote.ch1-1024);
         case CTR_CH3:
-            return (rc.ch3-1024);
+            return (RemoteCtrlData.remote.ch2-1024);
         case CTR_CH4:
-            return (rc.ch4-1024);
+            return (RemoteCtrlData.remote.ch3-1024);
         default:
             return 0;
     }
@@ -37,9 +37,9 @@ int16_t RemoteSystem::getAxis(int id) {
 int16_t RemoteSystem::getButton(int id) {
     switch(id) {
         case CTR_SW1:
-            return rc.sw1;
+            return RemoteCtrlData.remote.s1;
         case CTR_SW2:
-            return rc.sw2;
+            return RemoteCtrlData.remote.s2;
         default:
             return 0;
     }
