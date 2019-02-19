@@ -51,7 +51,8 @@
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
-#include "test_can.h"
+#include "bsp_uart.h"
+
 /* USER CODE BEGIN Includes */
 
 
@@ -85,7 +86,7 @@ int main(void){
 
   Init_Periphals ();
 
-  CanFilter_Init (&hcan1);
+
 
   MX_FREERTOS_Init ();
 
@@ -169,6 +170,7 @@ void Init_Periphals(){
   MX_USART6_UART_Init();
   MX_TIM3_Init();
   MX_UART8_Init();
+  RemoteCtl_Data_Receive_Start ();
 }
 /* USER CODE END 4 */
 

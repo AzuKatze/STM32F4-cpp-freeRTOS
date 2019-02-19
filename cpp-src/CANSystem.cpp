@@ -92,8 +92,15 @@ bool CANSystem::set(int id, int16_t data) {
 
 double CANSystem::get(int id ) {
 
-    sum = (((int16_t)can_recv_data_[id][2]<<8) | ((int16_t)can_recv_data_[id][3]));
-
+    for (int i = 0; i < 4; ++i) {
+        speed[id][i] = speed[id][i+1];
+        sum += speed[id][i+1];
+    }
+    speed[id][4] = (((int16_t)can_recv_data_[id][2]<<8) | ((int16_t)can_recv_data_[id][3]));
+    sum +=  speed[id][4];
+    sum /= 5;
+    sum = sum * 8192 / 60 / 1000;
+    if(sum <= 3&&sum >= -3)sum = 0;
     return sum;
 }
 

@@ -24,8 +24,8 @@ private:
     uint8_t can1_tx_data_[8];
     uint8_t can2_tx_data_[8];
 
-    double sum = 0;
-
+    int16_t speed[4][5] ;
+    float sum;
     CanRxMsgTypeDef Rx1Message;
     CanRxMsgTypeDef Rx2Message;
     CanTxMsgTypeDef Tx1Message;

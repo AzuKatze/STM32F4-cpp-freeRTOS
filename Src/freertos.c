@@ -51,7 +51,7 @@
 /* USER CODE BEGIN Includes */
 #include "can.h"
 #include "usart.h"
-#include "test_can.h"
+
 #include "task.h"
 #include "../cpp-src/Boot.h"
 /* USER CODE END Includes */
@@ -125,10 +125,10 @@ void MX_FREERTOS_Init(void) {
 
 /* USER CODE BEGIN Application */
 void CANTask(void const * argument){
-    osSignalWait (0x03,100);
+
     for(;;){
         osCanTask ();
-        osDelay (20);
+        osDelay (10);
     }
 }
 void IMUTask(void const * argument){
@@ -151,15 +151,16 @@ void YuntaiTask(void const * argument){
     }
 }
 void RemoteTask(void const *argument){
-    osSignalWait (0x05,100);
+
     for(;;){
+        osSignalWait (0x05,100);
         osRemoteTask ();
         osDelay (10);
     }
 }
-void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan){
-    osSignalSet (CANTaskHandle,0x03);
-}
+//void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan){
+//    osSignalSet (CANTaskHandle,0x03);
+//}
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     osSignalSet (RemoteTaskHandle,0x05);
 }

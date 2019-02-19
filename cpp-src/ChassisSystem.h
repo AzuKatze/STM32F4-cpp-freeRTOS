@@ -21,9 +21,9 @@
 class ChassisSystem {
 private:
     int16_t BF,LR,ROT;
-    IncrPIDSystem<double> IncrPID;
-    const double Kp = 10, Ki = 0, Kd = 0;
-    const double output_max = 2000;
+    PosPIDSystem<double> PosPID;
+    const double Kp = 4, Ki = 0, Kd = 0;
+    const double output_max = 2000,total_error = 2000;
 public:
 
 
