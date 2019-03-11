@@ -62,6 +62,9 @@ static osThreadId RemoteTaskHandle;
 static osThreadId IMUTaskHandle;
 static osThreadId ChassisTaskHandle;
 static osThreadId YuntaiTaskHandle;
+static osThreadId ShootTaskHandle;
+static osTimerDef_t can_timer;
+osTimerId TimId;
 /* USER CODE BEGIN Variables */
 /* USER CODE END Variables */
 
@@ -74,6 +77,7 @@ void IMUTask(void const * argument);
 void RemoteTask(void const * argument);
 void ChassisTask(void const * argument);
 void YuntaiTask(void const * argument);
+void ShootTask(void const * argument);
 /* USER CODE END FunctionPrototypes */
 /* Hook prototypes */
 
@@ -95,24 +99,28 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
+  TimId = osTimerCreate (&can_timer,osTimerPeriodic,CANTaskHandle);
   /* USER CODE END RTOS_TIMERS */
 
   /* Create the thread(s) */
 
-  osThreadDef(CANDEF,CANTask,osPriorityRealtime,0,512);
+  osThreadDef(CANDEF,CANTask,osPriorityHigh,0,512);
   CANTaskHandle = osThreadCreate (osThread(CANDEF),NULL);
 
-  osThreadDef(IMUDEF,IMUTask,osPriorityNormal,0,512);
-  IMUTaskHandle = osThreadCreate (osThread(IMUDEF),NULL);
+//  osThreadDef(IMUDEF,IMUTask,osPriorityHigh,0,512);
+//  IMUTaskHandle = osThreadCreate (osThread(IMUDEF),NULL);
 
-  osThreadDef(REMOTEDEF,RemoteTask,osPriorityHigh,0,512);
-  RemoteTaskHandle = osThreadCreate (osThread(REMOTEDEF),NULL);
+//  osThreadDef(YUNTAIDEF, YuntaiTask, osPriorityHigh, 0, 512);
+//  YuntaiTaskHandle = osThreadCreate(osThread(YUNTAIDEF), NULL);
 
-  osThreadDef(CHASSISDEF,ChassisTask,osPriorityHigh,0,512);
-  ChassisTaskHandle = osThreadCreate (osThread(CHASSISDEF),NULL);
+//  osThreadDef(REMOTEDEF,RemoteTask,osPriorityHigh,0,256);
+//  RemoteTaskHandle = osThreadCreate (osThread(REMOTEDEF),NULL);
 
-  osThreadDef(YUNTAIDEF, YuntaiTask, osPriorityNormal, 0, 1024);
-  YuntaiTaskHandle = osThreadCreate(osThread(YUNTAIDEF), NULL);
+//  osThreadDef(CHASSISDEF,ChassisTask,osPriorityHigh,0,512);
+//  ChassisTaskHandle = osThreadCreate (osThread(CHASSISDEF),NULL);
+
+  osThreadDef(SHOOTDEF, ShootTask, osPriorityHigh,0,512);
+  ShootTaskHandle = osThreadCreate (osThread(SHOOTDEF), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -120,6 +128,7 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
+  osTimerStart (TimId, 15);
   /* USER CODE END RTOS_QUEUES */
 }
 
@@ -127,14 +136,15 @@ void MX_FREERTOS_Init(void) {
 void CANTask(void const * argument){
 
     for(;;){
+
         osCanTask ();
-        osDelay (10);
+
     }
 }
 void IMUTask(void const * argument){
     for(;;){
         osIMUTask ();
-        osDelay (10);
+        osDelay (15);
 
     }
 }
@@ -153,17 +163,24 @@ void YuntaiTask(void const * argument){
 void RemoteTask(void const *argument){
 
     for(;;){
-        osSignalWait (0x05,100);
+        osSignalWait (0x01,100);
         osRemoteTask ();
         osDelay (10);
     }
 }
-//void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan){
-//    osSignalSet (CANTaskHandle,0x03);
-//}
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-    osSignalSet (RemoteTaskHandle,0x05);
+
+void ShootTask(void const *argument){
+    for(;;){
+
+        osShootTask ();
+        osDelay(15);
+    }
 }
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+    osSignalSet (RemoteTaskHandle,0x01);
+}
+
 
 /* USER CODE END Application */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

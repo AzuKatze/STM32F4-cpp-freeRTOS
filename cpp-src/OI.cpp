@@ -13,6 +13,7 @@
 #include "CANSystem.h"
 #include "ChassisSystem.h"
 #include "YuntaiSystem.h"
+#include "ShootSystem.h"
 OI *oi;
 
 extern "C" void KernelStart() {
@@ -34,27 +35,37 @@ extern "C" void osCanTask() {
 extern "C" void osIMUTask() {
     oi->IMUTask ();
 }
+extern "C" void osShootTask() {
+    oi->ShootTask ();
+}
 
 
 void OI::SystemStart() {
     ///initialize
-    this->chassisCanSystem = new CANSystem(0);
-    this->yuntaiCanSystem = new CANSystem(1);
+    //this->chassis_can_system = new CANSystem(0);
+    this->shoot_can_system = new CANSystem(0);
+    //this->shoot_can_system = new CANSystem(0);
     this->imuSystem = new IMUSystem;
     this->chassisSystem = new ChassisSystem;
     this->remoteSystem = new RemoteSystem;
     this->yuntaiSystem = new YuntaiSystem;
-    this->chassisCanSystem->initialize ();
-    this->chassisSystem->initialize ();
-    this->yuntaiCanSystem->initialize ();
+    this->shootSystem = new ShootSystem;
+
+    //this->chassis_can_system->initialize (0x200);
+    //this->chassisSystem->initialize ();
+    //this->yuntai_can_system->initialize (0x200);
+    //this->yuntaiSystem->initialize ();
+
+    this->shoot_can_system->initialize (0x200);
+    this->shootSystem->initialize ();
     this->imuSystem->initialize ();
     this->remoteSystem->initialize ();
     this->initialized = true;
     HAL_Delay (10);
 }
 void OI::CanTask() {
-    this->yuntaiCanSystem->update ();
-    this->chassisCanSystem->update ();
+    this->shoot_can_system->update ();
+    this->chassis_can_system->update ();
 }
 void OI::RemoteTask() {
     this->remoteSystem->update ();
@@ -63,8 +74,11 @@ void OI::YuntaiTask() {
     this->yuntaiSystem->update ();
 }
 void OI::ChassisTask() {
-    this->chassisSystem->update ();
+    //this->chassisSystem->update ();
 }
 void OI::IMUTask() {
     this->imuSystem->update ();
+}
+void OI::ShootTask() {
+    this->shootSystem->update ();
 }

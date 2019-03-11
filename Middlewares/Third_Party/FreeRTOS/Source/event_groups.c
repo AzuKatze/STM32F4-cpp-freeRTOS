@@ -124,7 +124,7 @@ typedef struct xEventGroupDefinition
 /*-----------------------------------------------------------*/
 
 /*
- * Test the bits set in uxCurrentEventBits to see if the wait condition is met.
+ * bsp the bits set in uxCurrentEventBits to see if the wait condition is met.
  * The wait condition is defined by xWaitForAllBits.  If xWaitForAllBits is
  * pdTRUE then the wait condition is met if all the bits set in uxBitsToWaitFor
  * are also set in uxCurrentEventBits.  If xWaitForAllBits is pdFALSE then the

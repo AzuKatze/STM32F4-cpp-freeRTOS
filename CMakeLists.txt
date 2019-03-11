@@ -15,7 +15,7 @@ set(OBJDUMP arm-none-eabi-objdump)
 set(SIZE arm-none-eabi-size)
 
 
-SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F427IIHx_FLASH.ld cpp-src/OI.cpp cpp-src/OI.h cpp-src/hal.h cpp-src/CANSystem.cpp cpp-src/CANSystem.h cpp-src/IMUSystem.cpp cpp-src/IMUSystem.h cpp-src/RemoteSystem.cpp cpp-src/RemoteSystem.h cpp-src/ChassisSystem.cpp cpp-src/ChassisSystem.h cpp-src/YuntaiSystem.cpp cpp-src/YuntaiSystem.h cpp-src/PIDSystem.cpp cpp-src/PIDSystem.h cpp-src/Boot.h)
+SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F427IIHx_FLASH.ld cpp-src/OI.cpp cpp-src/OI.h cpp-src/hal.h cpp-src/CANSystem.cpp cpp-src/CANSystem.h cpp-src/IMUSystem.cpp cpp-src/IMUSystem.h cpp-src/RemoteSystem.cpp cpp-src/RemoteSystem.h cpp-src/ChassisSystem.cpp cpp-src/ChassisSystem.h cpp-src/YuntaiSystem.cpp cpp-src/YuntaiSystem.h cpp-src/PIDSystem.cpp cpp-src/PIDSystem.h cpp-src/Boot.h Inc/kalman_filter.h Src/kalman_filter.c Inc/param_config.h cpp-src/ShootSystem.cpp cpp-src/ShootSystem.h)
 
 #Uncomment for hardware floating point
 #SET(FPU_FLAGS "-mfloat-abi=hard -mfpu=fpv4-sp-d16")
@@ -38,9 +38,9 @@ set(CMAKE_CXX_STANDARD 11)
 #add_definitions(-DARM_MATH_CM4 -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING -D__FPU_PRESENT=1)
 add_definitions(-D__weak=__attribute__\(\(weak\)\) -D__packed=__attribute__\(\(__packed__\)\) -DUSE_HAL_DRIVER -DSTM32F427xx)
 
-file(GLOB_RECURSE SOURCES "startup/*.*" "Middlewares/*.*" "Drivers/*.*" "Src/*.*" "Inc/*.*" "Test/Inc/*.*" "Test/Src/*.*")
+file(GLOB_RECURSE SOURCES "startup/*.*" "Middlewares/*.*" "Drivers/*.*" "Src/*.*" "Inc/*.*" "bsp/Inc/*.*" "bsp/Src/*.*")
 
-include_directories(Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Middlewares/ST/STM32_USB_Device_Library/Core/Inc Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F Middlewares/Third_Party/FreeRTOS/Source/include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS Test/Inc)
+include_directories(Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Middlewares/ST/STM32_USB_Device_Library/Core/Inc Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F Middlewares/Third_Party/FreeRTOS/Source/include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS bsp/Inc)
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 

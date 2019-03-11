@@ -9,13 +9,13 @@
 #include "CANSystem.h"
 #include "OI.h"
 #include "hal.h"
-#define CAN_ID 0x200
+
 
 CANSystem::CANSystem(int can_id){
     this->can_id = can_id;
 }
 
-bool CANSystem::initialize() {
+bool CANSystem::initialize(uint16_t std_id) {
 
     CAN_HandleTypeDef *hcan = &(can_id==0 ? hcan1 : hcan2);
 
@@ -54,7 +54,7 @@ bool CANSystem::initialize() {
     memset (this->can1_tx_data_,0,sizeof(this->can1_tx_data_));
     memset (this->can2_tx_data_,0,sizeof(this->can2_tx_data_));
 
-    hcan->pTxMsg->StdId = CAN_ID;
+    hcan->pTxMsg->StdId = std_id;
     hcan->pTxMsg->ExtId = 0x00;
     hcan->pTxMsg->RTR = CAN_RTR_DATA;
     hcan->pTxMsg->IDE = CAN_ID_STD;
@@ -71,7 +71,7 @@ bool CANSystem::update() {
      CAN_HandleTypeDef *hcan=&(can_id==0?hcan1:hcan2);
 
     for (int i = 0; i < 4; i++) {
-        hcan->pTxMsg->Data[ i * 2 ] = (uint8_t) ( can_write_data_[ i ] >> 8 );
+        hcan->pTxMsg->Data[ i * 2 ] = (uint8_t) ( (int16_t)can_write_data_[ i ] >> 8 );
         hcan->pTxMsg->Data[ i * 2 + 1 ] = (uint8_t) ( can_write_data_[ i ] );
     }
 

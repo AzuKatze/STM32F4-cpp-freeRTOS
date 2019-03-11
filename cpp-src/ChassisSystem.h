@@ -11,10 +11,7 @@
 #include "PIDSystem.h"
 #include "hal.h"
 
-#define CHASSIS_FR_ID 0
-#define CHASSIS_FL_ID 1
-#define CHASSIS_BL_ID 2
-#define CHASSIS_BR_ID 3
+
 
 
 
@@ -22,8 +19,8 @@ class ChassisSystem {
 private:
     int16_t BF,LR,ROT;
     PosPIDSystem<double> PosPID;
-    const double Kp = 4, Ki = 0, Kd = 0;
-    const double output_max = 2000,total_error = 2000;
+    const double Kp = 10, Ki = 0, Kd = 0;
+    const double output_max = 5000,total_error = 5000;
 public:
 
 
@@ -33,7 +30,7 @@ public:
 
     bool destroy();
 
-    bool setSpeed(int16_t bf , int16_t lr , int16_t rot);
+    bool set_speed(int16_t bf , int16_t lr , int16_t rot);
 };
 
 

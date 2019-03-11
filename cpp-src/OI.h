@@ -13,6 +13,7 @@
 #include "ChassisSystem.h"
 #include "IMUSystem.h"
 #include "RemoteSystem.h"
+#include "ShootSystem.h"
 #include "hal.h"
 
 
@@ -35,9 +36,13 @@ public:
 
     void IMUTask();
 
-    CANSystem *chassisCanSystem;
+    void ShootTask();
 
-    CANSystem *yuntaiCanSystem;
+    CANSystem *chassis_can_system;
+
+    CANSystem *shoot_can_system;
+
+    CANSystem *yuntai_can_system;
 
     IMUSystem *imuSystem;
 
@@ -46,6 +51,8 @@ public:
     ChassisSystem *chassisSystem;
 
     YuntaiSystem *yuntaiSystem;
+
+    ShootSystem *shootSystem;
 
     bool initialized;
 };

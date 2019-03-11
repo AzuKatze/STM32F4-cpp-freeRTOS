@@ -11,21 +11,27 @@
 
 #include "PIDSystem.h"
 #include "hal.h"
-#define PITCH_ID 0
-#define YAW_ID 1
+
 
 class YuntaiSystem {
 private:
-    int16_t pitch_ref_,yaw_ref_;
-    IncrPIDSystem<int16_t>PitchPosPID;
-    IncrPIDSystem<int16_t> PitchVelPID;
-    IncrPIDSystem<int16_t> YawPosPID;
-    IncrPIDSystem<int16_t> YawVelPID;
-    const int16_t PitchPosKp=1,PitchPosKi=1,PitchPosKd=1;
-    const int16_t PitchVelKp=1,PitchVelKi=1,PitchVelKd=1;
-    const int16_t YawPosKp=1,YawPosKi=1,YawPosKd=1;
-    const int16_t YawVelKp=1,YawVelKi=1,YawVelKd=1;
+    int16_t pitch_ref_, yaw_ref_;
+    PosPIDSystem<int16_t>PitchPosPID;
+    PosPIDSystem<int16_t> PitchVelPID;
+    PosPIDSystem<int16_t> YawPosPID;
+    PosPIDSystem<int16_t> YawVelPID;
+    const int16_t PitchPosKp=3, PitchPosKi=0, PitchPosKd=0;
+    const int16_t PitchVelKp=3, PitchVelKi=0, PitchVelKd=0;
+    const int16_t YawPosKp=3, YawPosKi=0, YawPosKd=0;
+    const int16_t YawVelKp=3, YawVelKi=0, YawVelKd=0;
     const int16_t output_max=3000;
+
+    kalman_filter_t yaw_kalman_filter;
+    kalman_filter_t pitch_kalman_filter;
+    kalman_filter_t dist_kalman_filter;
+
+    float *yaw_kf_result, *pitch_kf_result;
+
 public:
 
     YuntaiSystem();
@@ -36,7 +42,7 @@ public:
 
     bool destroy();
 
-    bool setPos(int16_t pitch_ref , int16_t yaw_ref);
+    bool setPos(int16_t pitch_ref, int16_t yaw_ref);
 };
 
 

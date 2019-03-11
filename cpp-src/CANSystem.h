@@ -38,7 +38,7 @@ public:
 
     CANSystem (int can_id);
 
-    bool initialize ();
+    bool initialize (uint16_t std_id);
 
     bool destroy ();
 

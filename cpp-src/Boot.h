@@ -11,4 +11,5 @@ void osYuntaiTask();
 void osCanTask();
 void osIMUTask();
 void osRemoteTask();
+void osShootTask();
 #endif //RMV3TESTDEMO_BOOT_H

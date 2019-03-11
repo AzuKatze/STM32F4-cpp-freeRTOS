@@ -7,6 +7,7 @@
 
 #ifndef RMV3TESTDEMO_HAL_H
 #define RMV3TESTDEMO_HAL_H
+
 extern "C" {
 #include "main.h"
 #include "stm32f4xx_hal.h"
@@ -16,10 +17,13 @@ extern "C" {
 #include "usart.h"
 #include "gpio.h"
 #include "bsp_imu.h"
-#include "test_can.h"
 #include "tim.h"
 #include "bsp_uart.h"
 #include "FreeRTOS.h"
 #include "stm32f4xx_it.h"
+#include "kalman_filter.h"
+#include "param_config.h"
 }
+
+
 #endif //RMV3TESTDEMO_HAL_H

@@ -10,15 +10,6 @@
 
 #include "hal.h"
 
-#define CTR_CH1 0
-#define CTR_CH2 1
-#define CTR_CH3 2
-#define CTR_CH4 3
-#define CTR_SW1 4
-#define CTR_SW2 5
-
-
-
 class RemoteSystem {
 public:
     RemoteSystem ();
